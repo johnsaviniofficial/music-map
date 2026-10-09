@@ -8,4 +8,6 @@ button {
     background-color: #64d98b;
     color: black;
     font-family: inherit;
+
+    padding: 12px 24px;
 }
