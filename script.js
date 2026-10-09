@@ -3,9 +3,12 @@ const redirectUri = "http://127.0.0.1:5500/index.html";
 const scopes = "user-top-read";
 const loginButton = document.getElementById('login-button');
 
-function handleLogin() {
+async function handleLogin() {
     const verifier = generateCodeVerifier();
-    console.log('Verifier length:', verifier.length);
+    const challange = await generateCodeChallange(verifier);
+
+    console.log('Verifier lengh:', verifier.length);
+    console.log('Challange lengh:', challange.length);
 }
 
 function generateCodeVerifier() {
@@ -15,6 +18,21 @@ function generateCodeVerifier() {
     return Array.from(randomBytes, function(byte) {
         return byte.toString(16).padStart(2, '0');
     }).join('');
+}
+
+async function generateCodeChallange(verifier) {
+const encoder = new TextEncoder();
+const data = encoder.encode(verifier);
+
+const hash = await crypto.subtle.digest('SHA-256', data);
+
+const bytes = new Uint8Array(hash);
+const binary = String.fromCharCode(...bytes);
+
+return btoa(binary)
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/=+$/, '');
 }
 
 loginButton.addEventListener('click', handleLogin);
