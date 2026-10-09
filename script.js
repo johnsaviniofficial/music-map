@@ -4,7 +4,17 @@ const scopes = "user-top-read";
 const loginButton = document.getElementById('login-button');
 
 function handleLogin() {
-    console.log('Login button clicked');
+    const verifier = generateCodeVerifier();
+    console.log('Verifier length:', verifier.length);
+}
+
+function generateCodeVerifier() {
+    const randomBytes = new Uint8Array(32);
+    crypto.getRandomValues(randomBytes);
+
+    return Array.from(randomBytes, function(byte) {
+        return byte.toString(16).padStart(2, '0');
+    }).join('');
 }
 
 loginButton.addEventListener('click', handleLogin);
