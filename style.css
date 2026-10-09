@@ -1,0 +1,11 @@
+body {
+    background-color: black;
+    color: white;
+    font-family: system-ui, "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+button {
+    background-color: #64d98b;
+    color: black;
+    font-family: inherit;
+}
