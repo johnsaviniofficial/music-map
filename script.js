@@ -5,10 +5,25 @@ const loginButton = document.getElementById('login-button');
 
 async function handleLogin() { 
     const verifier = generateCodeVerifier();
-    const challange = await generateCodeChallange(verifier);
+    const challenge = await generateCodeChallenge(verifier);
+    const state = generateCodeVerifier();
 
-    console.log('Verifier lengh:', verifier.length);
-    console.log('Challange lengh:', challange.length);
+    sessionStorage.setItem('code_verifier', verifier);
+    sessionStorage.setItem('oauth_state', state);
+
+    const authUrl = new URL('https://accounts.spotify.com/authorize');
+
+    authUrl.search = new URLSearchParams({
+        client_id: clientId,
+        response_type: 'code',
+        redirect_uri: redirectUri,
+        scope: scopes,
+        code_challenge_method: 'S256',
+        code_challenge: challenge,
+        state: state
+    }).toString();
+
+    window.location.assign(authUrl.toString());
 }
 
 function generateCodeVerifier() {
